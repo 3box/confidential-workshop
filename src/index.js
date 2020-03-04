@@ -3,29 +3,24 @@ const SPACE_NAME = 'workshop'
 const nameMap = {}
 
 async function start () {
-  // TODO
-  const box = await Box.create(window.ethereum)
+  //const box = // TODO -create 3box instance
   window.box = box
   authButton.disabled = false
-  const thread = await box.openThread(SPACE_NAME, 'chat', { ghost: true })
+  //const thread = // TODO - open ghostThread with SPACE_NAME and 'chat'
   window.ghostThread = thread
 
   ghostButton.addEventListener('click', event => {
     const content = ghostPost.value
-    console.log('cont' ,content)
-    thread.post(content)
+    // TODO - post content to thread
   })
 
-  thread.onUpdate(async () => {
-    updateGhostPosts()
-  })
+  // TODO - thread onUpdate updateGhostPosts
 }
 
 start()
 
 async function updateGhostPosts () {
-  // TODO
-  const posts = await ghostThread.getPosts()
+  //const posts = // TODO - getPost from ghostThread
 
   const dids = posts.map(post => post.author)
   await fetchMissingNames(dids)
@@ -41,8 +36,7 @@ async function updateGhostPosts () {
 async function fetchMissingNames (dids) {
   return Promise.all(dids.map(async did => {
     if (!nameMap[did]) {
-      // TODO
-      const { name } = await Box.getProfile(did)
+      //const { name } = // TODO - getProfile
       nameMap[did] = name
     }
   }))
@@ -51,34 +45,31 @@ async function fetchMissingNames (dids) {
 authButton.addEventListener('click', async event => {
   authButton.disabled = true
 
-  const addresses = await window.ethereum.enable()
-  await window.box.auth([SPACE_NAME], { address: addresses[0] })
-  console.log('authed')
+  const address = (await window.ethereum.enable())[0]
+  // TODO - auth 3box to SPACE_NAME with address
   ghostButton.disabled = false
   controlls.style.display = 'block'
   updateNameData(box)
 
   setName.addEventListener('click', async () => {
-    // TODO
-    await box.public.set('name', pubName.value)
+    // TODO set name to pubName.value
   })
 
-  window.currentSpace = await box.openSpace(SPACE_NAME)
+  //window.currentSpace = // TODO - open SPACE_NAME
 
-  await box.syncDone
+  // TODO - await syncDone
   updateNameData(box)
 })
 
 async function updateNameData(box) {
-  // TODO
-  pubName.value = await box.public.get('name')
+  //pubName.value = // TODO - get public name
 }
 
 joinConfThread.addEventListener('click', async () => {
   const address = confThreadAddress.value
   displayThread(true)
   try {
-    const thread = await window.currentSpace.joinThreadByAddress(address)
+    //const thread = // TODO - join thread by address
     registerThreadEvents(thread)
   } catch (e) {
     updateThreadError(e)
@@ -89,7 +80,7 @@ createConfThread.addEventListener('click', async () => {
   const name = confThreadName.value
   displayThread(true)
   try {
-    const thread = await window.currentSpace.createConfidentialThread(name)
+    //const thread = // TODO - create confidential thread with name
     registerThreadEvents(thread)
   } catch (e) {
     updateThreadError(e)
@@ -99,7 +90,7 @@ createConfThread.addEventListener('click', async () => {
 addThreadMod.addEventListener('click', async () => {
   const id = threadMod.value
   try {
-    await window.currentThread.addModerator(id)
+    // TODO - addModerator with id
     updateThreadCapabilities()
   } catch (e) {
     updateThreadError(e)
@@ -109,16 +100,16 @@ addThreadMod.addEventListener('click', async () => {
 addThreadMember.addEventListener('click', async () => {
   const id = threadMember.value
   try {
-    await window.currentThread.addMember(id)
+    // TODO - addMember with id
     updateThreadCapabilities()
   } catch (e) {
     updateThreadError(e)
   }
 })
 
-window.deletePost = async (el) => {
+window.deletePost = async ({ id }) => {
   try {
-    await window.currentThread.deletePost(el.id)
+    // TODO - deletePost id
     updateThreadData()
   } catch (e) {
     updateThreadError(e)
@@ -127,12 +118,8 @@ window.deletePost = async (el) => {
 
 const registerThreadEvents = thread => {
   window.currentThread = thread
-  thread.onUpdate(() => {
-    updateThreadData()
-  })
-  thread.onNewCapabilities(() => {
-    updateThreadCapabilities()
-  })
+  // TODO - onUpdate: updateThreadData
+  // TODO - onNewCapabilities: updateThreadCapabilities
   updateThreadData()
   updateThreadCapabilities()
 }
@@ -148,10 +135,9 @@ const updateThreadError = (e = '') => {
 }
 
 const updateThreadData = async () => {
-  threadAddress.innerHTML = window.currentThread.address
+  //threadAddress.innerHTML = // TODO - currentThread.address
   updateThreadError()
-  // TODO
-  const posts = await window.currentThread.getPosts()
+  //const posts = // TODO - get posts
   const dids = posts.map(post => post.author)
   await fetchMissingNames(dids)
   threadData.innerHTML = ''
@@ -163,12 +149,12 @@ const updateThreadData = async () => {
 
 const updateThreadCapabilities = async () => {
   threadMemberList.innerHTML = ''
-  const members = await window.currentThread.listMembers()
+  //const members = // TODO - listMembers
   members.map(member => {
       threadMemberList.innerHTML += member + '<br />'
   })
   threadModeratorList.innerHTML = ''
-  const moderators = await window.currentThread.listModerators()
+  //const moderators = // TODO - listModerators
   moderators.map(moderator => {
       threadModeratorList.innerHTML += moderator  +  '<br />'
   })
@@ -176,8 +162,7 @@ const updateThreadCapabilities = async () => {
 
 postThread.addEventListener('click', async () => {
   try {
-    // TODO
-    await window.currentThread.post(postMsg.value)
+    // TODO - post postMsg.value
   } catch (e) {
     updateThreadError(e)
   }
