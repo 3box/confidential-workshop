@@ -1,0 +1,88 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>3box Demo</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <!-- ghost thread -->
+    <div style="padding: 5px 100px; width: 100%;">
+      <!-- Get Profile GraphQL Div -->
+      <div style="padding: 0px 0px 25px 0px;">
+        <h2> Ghost Thread </h2>
+        <div style="width: 100%;">
+          <textarea id="ghostData" rows="15" cols="100" disabled >No posts yet...</textarea>
+        </div>
+        <input type="text" id="ghostPost" placeholder="Message">
+        <button id="ghostButton" type="button" class="btn btn-primary" disabled>Post</button>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Auth Box -->
+    <button id="authButton" type="button" class="btn btn-primary" style="margin: 50px 100px;" disabled=true>Auth 3box</button>
+
+    <div id="controlls" style="display: none; padding: 5px 100px;">
+      <!-- Name Div -->
+      <div style="padding: 0px 0px 25px 0px;">
+        <h5 style="padding: 20px 0px 10px 0px"> Name: </h5>
+        <input type="text" id="pubName" placeholder="Your name" >
+        <button id="setName" type="button" class="btn btn-primary">Set Name</button>
+      </div>
+
+      <!-- Thread Div -->
+      <div>
+        <h3> Confidential Threads: </h3>
+        <h6> Create: </h6>
+        <input type="text" id="confThreadName" placeholder="Name of thread"></br>
+        <button id="createConfThread" type="button" class="btn btn btn-primary">Create thread</button>  </br></br>
+        <h6> Join By Address: </h6>
+        <input type="text" id="confThreadAddress" placeholder="Address of thread"></br>
+        <button id="joinConfThread" type="button" class="btn btn btn-primary" >Join thread</button>  </br></br>
+
+        <div id="threadModeration" style="display: none;">
+          <input type="text" id="threadMod" placeholder="Thread Moderator">
+          <button id="addThreadMod" type="button" class="btn btn btn-primary" >Add Thread Moderator</button></br>
+          <h5> Moderators: </h5>
+          <p>
+            <span id="threadModeratorList"></span>
+          </p>
+        </div>
+        <div id="threadMembers" style="display: none;">
+          <input type="text" id="threadMember" placeholder="Thread Member">
+          <button id="addThreadMember" type="button" class="btn btn btn-primary" >Add Thread Member</button></br>
+          <h5> Members: </h5>
+          <p>
+            <span id="threadMemberList"></span>
+          </p>
+        </div></br>
+
+        <p style="color: red;">
+          <span id="threadACError"></span>
+        </p>
+        <h6> Thread Address: </h6>
+        <p>
+          <span id="threadAddress"></span>
+        </p>
+
+        <div id="posts" style="display: none;">
+          <h4> Posts: </h4>
+          <p>
+            <span id="threadData"></span>
+          </p>
+          <input type="text" id="postMsg" placeholder="Type your message">
+          <button id="postThread" type="button" class="btn btn btn-primary">Post</button>
+        </div>
+      </div>
+
+    </div>
+  </body>
+  <script src="https://unpkg.com/3box@1.17.2-beta.2/dist/3box.min.js"></script>
+  <!--<script src="https://unpkg.com/3box/dist/3box.min.js"></script>-->
+  <script type="text/javascript" src="index.js"></script>
+
+</html>
