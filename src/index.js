@@ -3,24 +3,24 @@ const SPACE_NAME = 'workshop'
 const nameMap = {}
 
 async function start () {
-  //const box = // TODO -create 3box instance
+  const box = await Box.create(window.ethereum)
   window.box = box
   authButton.disabled = false
-  //const thread = // TODO - open ghostThread with SPACE_NAME and 'chat'
+  const thread = await box.openThread(SPACE_NAME, 'chat', { ghost: true })
   window.ghostThread = thread
 
   ghostButton.addEventListener('click', event => {
     const content = ghostPost.value
-    // TODO - post content to thread
+    thread.post(content)
   })
 
-  // TODO - thread onUpdate updateGhostPosts
+  thread.onUpdate(updateGhostPosts)
 }
 
 start()
 
 async function updateGhostPosts () {
-  //const posts = // TODO - getPost from ghostThread
+  const posts = await window.ghostThread.getPosts()
 
   const dids = posts.map(post => post.author)
   await fetchMissingNames(dids)
@@ -36,7 +36,7 @@ async function updateGhostPosts () {
 async function fetchMissingNames (dids) {
   return Promise.all(dids.map(async did => {
     if (!nameMap[did]) {
-      //const { name } = // TODO - getProfile
+      const { name } = await Box.getProfile(did)
       nameMap[did] = name
     }
   }))
@@ -46,13 +46,13 @@ authButton.addEventListener('click', async event => {
   authButton.disabled = true
 
   const address = (await window.ethereum.enable())[0]
-  // TODO - auth 3box to SPACE_NAME with address
+  await box.auth([SPACE_NAME], { address })
   ghostButton.disabled = false
   controlls.style.display = 'block'
   updateNameData(box)
 
   setName.addEventListener('click', async () => {
-    // TODO set name to pubName.value
+    await box.public.set('name', pubName.value)
   })
 
   //window.currentSpace = // TODO - open SPACE_NAME
@@ -62,7 +62,7 @@ authButton.addEventListener('click', async event => {
 })
 
 async function updateNameData(box) {
-  //pubName.value = // TODO - get public name
+  pubName.value = await box.public.get('name')
 }
 
 joinConfThread.addEventListener('click', async () => {
